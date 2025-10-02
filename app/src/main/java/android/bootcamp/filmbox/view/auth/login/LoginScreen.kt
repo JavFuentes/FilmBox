@@ -2,6 +2,7 @@ package android.bootcamp.filmbox.view.auth.login
 
 import android.bootcamp.filmbox.R
 import android.bootcamp.filmbox.ui.theme.Amber400
+import android.bootcamp.filmbox.ui.theme.AmberDesactivado
 import android.bootcamp.filmbox.ui.theme.Indigo950
 import android.bootcamp.filmbox.ui.theme.Slate200
 import androidx.compose.foundation.Image
@@ -27,6 +28,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,12 +41,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Preview
 @Composable
-fun LoginScreen() {
-    var user by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(
+    loginViewModel: LoginViewModel = viewModel()
+) {
+    val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold { padding ->
         Column(
@@ -72,10 +78,11 @@ fun LoginScreen() {
             Spacer(Modifier.weight(1f))
 
             TextField(
-                value = user,
-                onValueChange = { user = it },
+                value = uiState.user,
+                onValueChange = { loginViewModel.onUserChanged(it) },
                 shape = RoundedCornerShape(16.dp),
                 modifier =  Modifier.width(300.dp),
+                label = { Text("Nombre de usuario", style = MaterialTheme.typography.labelLarge) },
                 colors = TextFieldDefaults.colors(
                     unfocusedTextColor = Indigo950,
                     focusedTextColor = Indigo950,
@@ -88,15 +95,17 @@ fun LoginScreen() {
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     color = Indigo950
                 )
+
             )
 
             Spacer(Modifier.height(16.dp))
 
             TextField(
-                value = password,
-                onValueChange = { password = it },
+                value = uiState.password,
+                onValueChange = { loginViewModel.onPasswordChanged(it) },
                 shape = RoundedCornerShape(16.dp),
                 modifier =  Modifier.width(300.dp),
+                label = { Text("Contraseña", style = MaterialTheme.typography.labelLarge) },
                 colors = TextFieldDefaults.colors(
                     unfocusedTextColor = Indigo950,
                     focusedTextColor = Indigo950,
@@ -115,12 +124,15 @@ fun LoginScreen() {
 
             Button(
                 onClick = { },
+                enabled = uiState.isLoginEnabled,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    disabledContainerColor = AmberDesactivado,
+                    disabledContentColor = Color.White
                 )
             ) {
-                Text("Ingresar")
+                Text("Ingresar", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp))
             }
 
             TextButton(onClick = { }) {
@@ -139,7 +151,6 @@ fun LoginScreen() {
                     Text("Registrar Aquí", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = Amber400)
                 }
             }
-
             Spacer(Modifier.weight(2f))
 
         }
