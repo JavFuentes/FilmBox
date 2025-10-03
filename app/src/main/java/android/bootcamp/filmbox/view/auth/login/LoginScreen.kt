@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,25 +48,25 @@ fun LoginScreen(
 
     Scaffold { padding ->
         Column(
-            Modifier
+            modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
                 .background(color = Indigo950)
                 .padding(horizontal = 64.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-
-            ) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Spacer(Modifier.weight(3f))
+
             Image(
                 modifier = Modifier.size(225.dp),
                 painter = painterResource(R.drawable.logo),
-                contentDescription = "logo de la app"
+                contentDescription = stringResource(R.string.app_logo_description)
             )
 
             Spacer(Modifier.weight(1f))
 
             Text(
-                text = "Tu biblioteca de películas favoritas",
+                text = stringResource(R.string.login_tagline),
                 color = Slate200
             )
 
@@ -75,8 +76,13 @@ fun LoginScreen(
                 value = uiState.user,
                 onValueChange = { loginViewModel.onUserChanged(it) },
                 shape = AppShape.medium,
-                modifier =  Modifier.width(300.dp),
-                label = { Text("Nombre de usuario", style = MaterialTheme.typography.labelLarge) },
+                modifier = Modifier.width(300.dp),
+                label = {
+                    Text(
+                        stringResource(R.string.login_username_label),
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                },
                 colors = TextFieldDefaults.colors(
                     unfocusedTextColor = Indigo950,
                     focusedTextColor = Indigo950,
@@ -97,8 +103,13 @@ fun LoginScreen(
                 value = uiState.password,
                 onValueChange = { loginViewModel.onPasswordChanged(it) },
                 shape = AppShape.medium,
-                modifier =  Modifier.width(300.dp),
-                label = { Text("Contraseña", style = MaterialTheme.typography.labelLarge) },
+                modifier = Modifier.width(300.dp),
+                label = {
+                    Text(
+                        stringResource(R.string.login_password_label),
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                },
                 colors = TextFieldDefaults.colors(
                     unfocusedTextColor = Indigo950,
                     focusedTextColor = Indigo950,
@@ -126,28 +137,42 @@ fun LoginScreen(
                     disabledContentColor = Color.White
                 )
             ) {
-                Text("Ingresar", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp))
+                Text(
+                    stringResource(R.string.login_button),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
+                )
             }
 
             TextButton(onClick = { }) {
-                Text("¿Has olvidado la contraseña?", color = Slate200)
+                Text(
+                    stringResource(R.string.login_forgot_password),
+                    color = Slate200
+                )
             }
 
             Spacer(Modifier.weight(4f))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "¿No tienes cuenta?", modifier= Modifier.padding(8.dp), style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp) , color = Slate200)
+                Text(
+                    text = stringResource(R.string.login_no_account),
+                    modifier = Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
+                    color = Slate200
+                )
 
                 OutlinedButton(
                     onClick = { },
-                    shape = MaterialTheme.shapes.large,
-                    modifier = Modifier
+                    shape = MaterialTheme.shapes.large
                 ) {
-                    Text("Registrar Aquí", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = Amber400)
+                    Text(
+                        stringResource(R.string.login_register_here),
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+                        color = Amber400
+                    )
                 }
             }
-            Spacer(Modifier.weight(2f))
 
+            Spacer(Modifier.weight(2f))
         }
     }
 }

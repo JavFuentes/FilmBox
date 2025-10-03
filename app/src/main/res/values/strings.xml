@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">FilmBox</string>
+
+    <!-- Login Screen -->
+    <string name="login_tagline">Tu biblioteca de películas favoritas</string>
+    <string name="login_username_label">Nombre de usuario</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_forgot_password">¿Has olvidado la contraseña?</string>
+    <string name="login_no_account">¿No tienes cuenta?</string>
+    <string name="login_register_here">Registrar Aquí</string>
+    <string name="app_logo_description">logo de la app</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Regístrate para acceder\na tu caja de películas</string>
+    <string name="register_phone_label">Número móvil</string>
+    <string name="register_name_label">Nombre completo</string>
+    <string name="register_username_label">Nombre de usuario</string>
+    <string name="register_password_label">Contraseña</string>
+    <string name="register_button">Registrar</string>
+    <string name="register_has_account">¿Tienes una cuenta?</string>
+    <string name="register_login_button">Entrar</string>
+    <string name="register_terms">Al registrate, aceptas nuestras\nCondiciones y Política de privacidad</string>
+    <string name="password_show">Mostrar contraseña</string>
+    <string name="password_hide">Ocultar contraseña</string>
 </resources>
