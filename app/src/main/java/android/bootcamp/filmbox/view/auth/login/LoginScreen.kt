@@ -80,7 +80,7 @@ fun LoginScreen(
             TextField(
                 value = uiState.user,
                 onValueChange = { loginViewModel.onUserChanged(it) },
-                shape = RoundedCornerShape(16.dp),
+                shape = MaterialTheme.shapes.medium,
                 modifier =  Modifier.width(300.dp),
                 label = { Text("Nombre de usuario", style = MaterialTheme.typography.labelLarge) },
                 colors = TextFieldDefaults.colors(
@@ -95,7 +95,6 @@ fun LoginScreen(
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     color = Indigo950
                 )
-
             )
 
             Spacer(Modifier.height(16.dp))
@@ -103,7 +102,7 @@ fun LoginScreen(
             TextField(
                 value = uiState.password,
                 onValueChange = { loginViewModel.onPasswordChanged(it) },
-                shape = RoundedCornerShape(16.dp),
+                shape = MaterialTheme.shapes.medium,
                 modifier =  Modifier.width(300.dp),
                 label = { Text("Contraseña", style = MaterialTheme.typography.labelLarge) },
                 colors = TextFieldDefaults.colors(
@@ -125,6 +124,7 @@ fun LoginScreen(
             Button(
                 onClick = { },
                 enabled = uiState.isLoginEnabled,
+                shape = MaterialTheme.shapes.large,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,

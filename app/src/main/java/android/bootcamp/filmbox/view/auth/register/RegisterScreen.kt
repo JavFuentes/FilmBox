@@ -1,5 +1,6 @@
 package android.bootcamp.filmbox.view.auth.register
 
+import android.bootcamp.filmbox.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,16 +35,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import android.bootcamp.filmbox.R
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Preview
 @Composable
 fun RegisterScreen(
-
+    registerViewModel: RegisterViewModel = viewModel()
 ){
+    val uiState by registerViewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold { padding ->
         Column(Modifier
             .padding(padding)
@@ -64,9 +68,15 @@ fun RegisterScreen(
 
             Spacer(Modifier.weight(1f))
 
-            FormRegisterParent()
+            FormRegisterParent(
+                uiState = uiState,
+                onPhoneNumberChanged = { registerViewModel.onPhoneNumberChanged(it) },
+                onNameChanged = { registerViewModel.onNameChanged(it) },
+                onUserChanged = { registerViewModel.onUserChanged(it) },
+                onPasswordChanged = { registerViewModel.onPasswordChanged(it) }
+            )
 
-            ButtonsRegister()
+            ButtonsRegister(isRegisterEnabled = uiState.isRegisterEnabled)
 
             Spacer(Modifier.weight(1f))
             Text(text = "Al registrate, aceptas nuestras\nCondiciones y Política de privacidad",
@@ -79,27 +89,24 @@ fun RegisterScreen(
             ButtonsFoot()
 
         }
-
     }
-
 }
 
 
 @Composable
-fun ButtonsRegister(){
-
+fun ButtonsRegister(isRegisterEnabled: Boolean){
     Column (Modifier.fillMaxWidth()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Button(
             onClick = {},
+            enabled = isRegisterEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp)
         ) {
             Text("Registrar")
         }
-
     }
 }
 
@@ -118,31 +125,38 @@ fun ButtonsFoot(){
 
     }
 }
-@Composable
-fun FormRegisterParent(){
-    var phoneNumberOrEmail by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var user by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
+@Composable
+fun FormRegisterParent(
+    uiState: RegisterUiState,
+    onPhoneNumberChanged: (String) -> Unit,
+    onNameChanged: (String) -> Unit,
+    onUserChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit
+){
     Column (Modifier.fillMaxWidth().padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
-        MyPhoneNumberOrEmailField(phoneNumberOrEmail = phoneNumberOrEmail) { phoneNumberOrEmail = it }
-        MyNameField(name = name) { name = it }
-        MyUserField(user = user) { user = it }
-        MyPasswordField(password = password) { password = it }
+        MyPhoneNumberField(
+            phoneNumber = uiState.phoneNumber) { onPhoneNumberChanged }
+        MyNameField(
+            name = uiState.name) { onNameChanged }
+        MyUserField(
+            user = uiState.user) { onUserChanged }
+        MyPasswordField(
+            password = uiState.password) { onPasswordChanged }
     }
 }
 
 @Composable
-fun MyPhoneNumberOrEmailField(phoneNumberOrEmail: String, onValueChange: (String) -> Unit){
+fun MyPhoneNumberField(phoneNumber: String, onValueChange: (String) -> Unit){
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth().padding(5.dp),
-        value = phoneNumberOrEmail,
+        value = phoneNumber,
         onValueChange = { onValueChange(it) },
-        label = { Text("Número de móvil o correo electrónico")}
+        label = { Text("Número de móvil")}
     )
 }
+
 @Composable
 fun MyNameField(name: String, onValueChange: (String) -> Unit){
     OutlinedTextField(
