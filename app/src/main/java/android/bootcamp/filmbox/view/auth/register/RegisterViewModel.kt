@@ -62,7 +62,6 @@ private fun isUserValid(user: String): Boolean = user.length >= 3
 private fun isPasswordValid(password: String): Boolean = password.length >= 6
 
 data class RegisterUiState(
-
     val phoneNumber: String = "",
     val name: String = "",
     val user: String = "",

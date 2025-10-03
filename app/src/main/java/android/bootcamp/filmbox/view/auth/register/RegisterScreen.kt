@@ -52,7 +52,7 @@ fun RegisterScreen(
         Column(Modifier
             .padding(padding)
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background),
+            .background(color = MaterialTheme.colorScheme.secondary),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             Spacer(Modifier.weight(1f))
@@ -64,7 +64,6 @@ fun RegisterScreen(
             Text(text = "Regístrate para acceder\na tu caja de películas",
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp)
-
 
             Spacer(Modifier.weight(1f))
 
@@ -79,6 +78,7 @@ fun RegisterScreen(
             ButtonsRegister(isRegisterEnabled = uiState.isRegisterEnabled)
 
             Spacer(Modifier.weight(1f))
+
             Text(text = "Al registrate, aceptas nuestras\nCondiciones y Política de privacidad",
                 Modifier.padding(20.dp),
                 textAlign = TextAlign.Center,
@@ -137,13 +137,21 @@ fun FormRegisterParent(
     Column (Modifier.fillMaxWidth().padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
         MyPhoneNumberField(
-            phoneNumber = uiState.phoneNumber) { onPhoneNumberChanged }
+            phoneNumber = uiState.phoneNumber,
+            onValueChange = onPhoneNumberChanged
+        )
         MyNameField(
-            name = uiState.name) { onNameChanged }
+            name = uiState.name,
+            onValueChange = onNameChanged
+        )
         MyUserField(
-            user = uiState.user) { onUserChanged }
+            user = uiState.user,
+            onValueChange = onUserChanged
+        )
         MyPasswordField(
-            password = uiState.password) { onPasswordChanged }
+            password = uiState.password,
+            onValueChange = onPasswordChanged
+        )
     }
 }
 
@@ -203,7 +211,5 @@ fun MyPasswordField(password: String, onValueChange: (String) -> Unit){
             )
 
         }
-
-
     )
 }

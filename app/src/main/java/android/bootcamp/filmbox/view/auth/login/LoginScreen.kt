@@ -72,7 +72,8 @@ fun LoginScreen(
             Spacer(Modifier.weight(1f))
 
             Text(
-                text = "Tu biblioteca de películas favoritas", color = Slate200
+                text = "Tu biblioteca de películas favoritas",
+                color = Slate200
             )
 
             Spacer(Modifier.weight(1f))
