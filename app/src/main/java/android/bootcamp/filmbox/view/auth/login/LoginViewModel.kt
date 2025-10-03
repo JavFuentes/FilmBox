@@ -32,9 +32,7 @@ class LoginViewModel : ViewModel() {
             it.copy(isLoginEnabled = enabledLogin)
         }
     }
-
 }
-
 
 private fun isUserValid(user: String): Boolean = user.length >= 3
 private fun isPasswordValid(password: String): Boolean = password.length >= 6

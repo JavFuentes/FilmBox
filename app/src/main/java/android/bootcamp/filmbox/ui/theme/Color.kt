@@ -17,7 +17,7 @@ val Yellow1 = Color(0xFFD2C1B6)
 
 val Charcoal = Color(0xFF333333)
 val Amber400 = Color(0xFFFFC107)
-val AmberDesactivado = Color(0xFFBBA356)
+val Amber300 = Color(0xFFBBA356)
 val Slate200 = Color(0xFFE2E8F0)
 val Indigo950 = Color(0xFF1A1A2E)
 val Lavender100 = Color(0xFFF4F0FF)

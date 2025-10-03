@@ -1,6 +1,11 @@
 package android.bootcamp.filmbox.view.auth.register
 
 import android.bootcamp.filmbox.R
+import android.bootcamp.filmbox.ui.theme.Amber300
+import android.bootcamp.filmbox.ui.theme.Amber400
+import android.bootcamp.filmbox.ui.theme.AppShape
+import android.bootcamp.filmbox.ui.theme.Indigo950
+import android.bootcamp.filmbox.ui.theme.Slate200
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,13 +20,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,7 +61,8 @@ fun RegisterScreen(
         Column(Modifier
             .padding(padding)
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.secondary),
+            .background(color = MaterialTheme.colorScheme.background)
+            .padding(horizontal = 50.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             Spacer(Modifier.weight(1f))
@@ -63,6 +73,7 @@ fun RegisterScreen(
             )
             Text(text = "Regístrate para acceder\na tu caja de películas",
                 textAlign = TextAlign.Center,
+                color = Slate200,
                 fontSize = 20.sp)
 
             Spacer(Modifier.weight(1f))
@@ -83,15 +94,14 @@ fun RegisterScreen(
                 Modifier.padding(20.dp),
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Light)
-            HorizontalDivider()
+                fontWeight = FontWeight.Light,
+                color = Amber300)
 
             ButtonsFoot()
 
         }
     }
 }
-
 
 @Composable
 fun ButtonsRegister(isRegisterEnabled: Boolean){
@@ -103,7 +113,14 @@ fun ButtonsRegister(isRegisterEnabled: Boolean){
             enabled = isRegisterEnabled,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp)
+                .padding(horizontal = 10.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary,
+                disabledContainerColor= Amber300,
+                disabledContentColor= MaterialTheme.colorScheme.onSecondary
+            )
+
         ) {
             Text("Registrar")
         }
@@ -117,10 +134,14 @@ fun ButtonsFoot(){
         .padding(20.dp),
         horizontalArrangement = Arrangement.Center) {
         TextButton(onClick = {}) {
-            Text("¿Tienes una cuenta?")
+            Text("¿Tienes una cuenta?", color = Slate200)
         }
-        TextButton(onClick = {}) {
-            Text("Entrar", fontWeight = FontWeight.Bold)
+        OutlinedButton(
+            onClick = { },
+            shape = AppShape.large,
+            modifier = Modifier
+        ) {
+            Text("Entrar", style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp), color = Amber400)
         }
 
     }
@@ -157,41 +178,72 @@ fun FormRegisterParent(
 
 @Composable
 fun MyPhoneNumberField(phoneNumber: String, onValueChange: (String) -> Unit){
-    OutlinedTextField(
+    TextField(
         modifier = Modifier.fillMaxWidth().padding(5.dp),
         value = phoneNumber,
+        shape = AppShape.medium,
         onValueChange = { onValueChange(it) },
-        label = { Text("Número de móvil")}
+        label = { Text("Número móvil", style = MaterialTheme.typography.labelLarge) },
+        colors = TextFieldDefaults.colors(
+            unfocusedTextColor = Indigo950,
+            focusedTextColor = Indigo950,
+            unfocusedContainerColor = Slate200,
+            focusedContainerColor = Slate200,
+            cursorColor = Indigo950,
+            focusedIndicatorColor = Slate200,
+            unfocusedIndicatorColor = Slate200
+        ),
     )
 }
 
 @Composable
 fun MyNameField(name: String, onValueChange: (String) -> Unit){
-    OutlinedTextField(
+    TextField(
         modifier = Modifier.fillMaxWidth().padding(5.dp),
         value = name,
+        shape = AppShape.medium,
         onValueChange = { onValueChange(it) },
-        label = { Text("Nombre completo")}
+        label = { Text("Nombre completo", style = MaterialTheme.typography.labelLarge) },
+        colors = TextFieldDefaults.colors(
+            unfocusedTextColor = Indigo950,
+            focusedTextColor = Indigo950,
+            unfocusedContainerColor = Slate200,
+            focusedContainerColor = Slate200,
+            cursorColor = Indigo950,
+            focusedIndicatorColor = Slate200,
+            unfocusedIndicatorColor = Slate200
+        ),
     )
 }
 @Composable
 fun MyUserField(user: String, onValueChange: (String) -> Unit){
-    OutlinedTextField(
+    TextField(
         modifier = Modifier.fillMaxWidth().padding(5.dp),
         value = user,
+        shape = AppShape.medium,
         onValueChange = { onValueChange(it) },
-        label = { Text("Nombre de usuario")}
+        label = { Text("Nombre de usuario", style = MaterialTheme.typography.labelLarge) },
+        colors = TextFieldDefaults.colors(
+            unfocusedTextColor = Indigo950,
+            focusedTextColor = Indigo950,
+            unfocusedContainerColor = Slate200,
+            focusedContainerColor = Slate200,
+            cursorColor = Indigo950,
+            focusedIndicatorColor = Slate200,
+            unfocusedIndicatorColor = Slate200
+        ),
     )
 }
 
 @Composable
 fun MyPasswordField(password: String, onValueChange: (String) -> Unit){
     var passwordHidden by remember {mutableStateOf(true)}
-    OutlinedTextField(
+    TextField(
         modifier = Modifier.fillMaxWidth().padding(5.dp),
         value = password,
+        shape = AppShape.medium,
         onValueChange = { onValueChange(it) },
-        label = { Text("Contraseña")},
+        label = { Text("Contraseña", style = MaterialTheme.typography.labelLarge) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         visualTransformation = if(passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
@@ -210,6 +262,15 @@ fun MyPasswordField(password: String, onValueChange: (String) -> Unit){
                 }
             )
 
-        }
+        },
+        colors = TextFieldDefaults.colors(
+            unfocusedTextColor = Indigo950,
+            focusedTextColor = Indigo950,
+            unfocusedContainerColor = Slate200,
+            focusedContainerColor = Slate200,
+            cursorColor = Indigo950,
+            focusedIndicatorColor = Slate200,
+            unfocusedIndicatorColor = Slate200
+        ),
     )
 }
