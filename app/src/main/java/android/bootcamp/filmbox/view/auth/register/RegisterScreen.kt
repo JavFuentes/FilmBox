@@ -6,6 +6,7 @@ import android.bootcamp.filmbox.ui.theme.Amber400
 import android.bootcamp.filmbox.ui.theme.AppShape
 import android.bootcamp.filmbox.ui.theme.Indigo950
 import android.bootcamp.filmbox.ui.theme.Slate200
+import android.bootcamp.filmbox.view.core.navigation.Register
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,10 +50,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-@Preview
 @Composable
 fun RegisterScreen(
-    registerViewModel: RegisterViewModel = viewModel()
+    registerViewModel: RegisterViewModel = viewModel(),
+    navigateBack: () -> Unit
 ) {
     val uiState by registerViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -103,7 +104,7 @@ fun RegisterScreen(
                 color = Amber300
             )
 
-            ButtonsFoot()
+            ButtonsFoot(navigateBack = navigateBack)
         }
     }
 }
@@ -135,7 +136,7 @@ fun ButtonsRegister(isRegisterEnabled: Boolean) {
 }
 
 @Composable
-fun ButtonsFoot() {
+fun ButtonsFoot(navigateBack: () -> Unit) {
     Row(
         modifier = Modifier
             .width(300.dp)
@@ -150,7 +151,7 @@ fun ButtonsFoot() {
         }
 
         OutlinedButton(
-            onClick = { },
+            onClick = { navigateBack() },
             shape = AppShape.large
         ) {
             Text(
@@ -202,6 +203,7 @@ fun MyPhoneNumberField(phoneNumber: String, onValueChange: (String) -> Unit) {
             .fillMaxWidth()
             .padding(5.dp),
         value = phoneNumber,
+        singleLine = true,
         shape = AppShape.medium,
         onValueChange = { onValueChange(it) },
         label = {
@@ -229,6 +231,7 @@ fun MyNameField(name: String, onValueChange: (String) -> Unit) {
             .fillMaxWidth()
             .padding(5.dp),
         value = name,
+        singleLine = true,
         shape = AppShape.medium,
         onValueChange = { onValueChange(it) },
         label = {
@@ -256,6 +259,7 @@ fun MyUserField(user: String, onValueChange: (String) -> Unit) {
             .fillMaxWidth()
             .padding(5.dp),
         value = user,
+        singleLine = true,
         shape = AppShape.medium,
         onValueChange = { onValueChange(it) },
         label = {
@@ -327,4 +331,10 @@ fun MyPasswordField(password: String, onValueChange: (String) -> Unit) {
             unfocusedIndicatorColor = Slate200
         )
     )
+}
+
+@Preview
+@Composable
+fun RegisterScreenPreview(){
+    RegisterScreen {  }
 }

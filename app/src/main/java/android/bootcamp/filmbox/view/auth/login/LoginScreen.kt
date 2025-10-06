@@ -6,6 +6,7 @@ import android.bootcamp.filmbox.ui.theme.Amber400
 import android.bootcamp.filmbox.ui.theme.AppShape
 import android.bootcamp.filmbox.ui.theme.Indigo950
 import android.bootcamp.filmbox.ui.theme.Slate200
+import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -33,16 +34,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-@Preview
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel = viewModel()
+    loginViewModel: LoginViewModel = viewModel(),
+    navigateToRegister: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
     val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -67,7 +70,10 @@ fun LoginScreen(
 
             Text(
                 text = stringResource(R.string.login_tagline),
-                color = Slate200
+                textAlign = TextAlign.Center,
+                color = Slate200,
+
+
             )
 
             Spacer(Modifier.weight(1f))
@@ -127,7 +133,7 @@ fun LoginScreen(
             Spacer(Modifier.height(16.dp))
 
             Button(
-                onClick = { },
+                onClick = { navigateToHome() },
                 enabled = uiState.isLoginEnabled,
                 shape = AppShape.large,
                 modifier = Modifier.fillMaxWidth(),
@@ -161,7 +167,7 @@ fun LoginScreen(
                 )
 
                 OutlinedButton(
-                    onClick = { },
+                    onClick = { navigateToRegister() },
                     shape = MaterialTheme.shapes.large
                 ) {
                     Text(
@@ -175,4 +181,10 @@ fun LoginScreen(
             Spacer(Modifier.weight(2f))
         }
     }
+}
+
+@Preview
+@Composable
+fun LoginScreenPreview(){
+
 }

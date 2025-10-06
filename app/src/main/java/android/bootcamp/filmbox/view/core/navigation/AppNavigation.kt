@@ -21,13 +21,20 @@ object Home
 fun AppNavigation(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Register){
+    NavHost(navController = navController, startDestination = Login){
         composable<Login> {
-            LoginScreen()
+            LoginScreen(
+                navigateToRegister = { navController.navigate(Register) },
+                navigateToHome = { navController.navigate(Home) }
+            )
         }
 
         composable<Register> {
-            RegisterScreen()
+            RegisterScreen( navigateBack = { navController.popBackStack() } )
+        }
+
+        composable<Home> {
+
         }
     }
 }
