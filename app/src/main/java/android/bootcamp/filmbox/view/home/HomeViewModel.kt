@@ -1,5 +1,6 @@
 package android.bootcamp.filmbox.view.home
 
+import android.bootcamp.filmbox.BuildConfig
 import android.bootcamp.filmbox.data.model.Movie
 import android.bootcamp.filmbox.data.remote.RetrofitClient
 import androidx.lifecycle.ViewModel
@@ -22,7 +23,7 @@ class HomeViewModel: ViewModel() {
             _uiState.update { it.copy( isLoading = true) }
             try {
                 val response = RetrofitClient.apiService.getPopularMovies(
-                    authorization = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMGVjYWQ4YWVkOGQyODhjYTE4NDllYjhmNmMxZTk3YiIsIm5iZiI6MTc1OTcxNDUzNC4yODMsInN1YiI6IjY4ZTMxY2U2MjdlMWNkMTI4NTYxN2I0MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.y3pHywkKusETPsPiNgSvY-BIRrHZ8QpjcFLk4cda7Tg"
+                    authorization = "Bearer ${BuildConfig.TMDB_ACCESS_TOKEN}"
                 )
 
                 _uiState.update{

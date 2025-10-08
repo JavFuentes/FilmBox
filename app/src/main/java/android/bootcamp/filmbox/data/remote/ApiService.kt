@@ -11,7 +11,7 @@ interface ApiService {
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Header("Authorization") authorization: String,
-        @Query("languege") language: String = "es-ES",
+        @Query("language") language: String = "es-ES",
         @Query("page") page: Int = 1
     ): MovieResponse
 }
