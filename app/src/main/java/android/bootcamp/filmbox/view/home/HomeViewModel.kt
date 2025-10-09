@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
 
@@ -18,36 +18,48 @@ class HomeViewModel: ViewModel() {
         loadMovies()
     }
 
-    private fun loadMovies() {
+    private fun loadMovies(page: Int = 1) {
         viewModelScope.launch {
-            _uiState.update { it.copy( isLoading = true) }
+            _uiState.update { it.copy(isLoading = page == 1) }
             try {
                 val response = RetrofitClient.apiService.getPopularMovies(
-                    authorization = "Bearer ${BuildConfig.TMDB_ACCESS_TOKEN}"
+                    authorization = "Bearer ${BuildConfig.TMDB_ACCESS_TOKEN}",
+                    page = page
                 )
 
-                _uiState.update{
+                _uiState.update {
                     it.copy(
-                        movies = response.results,
+                        // Si es la página 1, reemplazar; si no, agregar a la lista existente
+                        movies = if (page == 1) response.results
+                        else it.movies + response.results,
                         isLoading = false,
-                        errorMessage = null
+                        errorMessage = null,
+                        hasMorePages = page < response.totalPages,
+                        currentPage = page,
+                        isLoadingMore = false
                     )
                 }
 
-
-            } catch (e: Exception){
-                _uiState.update{
+            } catch (e: Exception) {
+                _uiState.update {
                     it.copy(
                         isLoading = false,
                         errorMessage = e.message ?: "Error desconocido"
                     )
                 }
             }
-
         }
     }
 
-    fun retry(){
+    fun loadNextPage() {
+        if (!_uiState.value.isLoadingMore && _uiState.value.hasMorePages) {
+            _uiState.update { it.copy(isLoadingMore = true) }
+            loadMovies(_uiState.value.currentPage + 1)
+        }
+    }
+
+    fun retry() {
+        _uiState.update { it.copy(currentPage = 1, isLoadingMore = false) }
         loadMovies()
     }
 }
@@ -55,5 +67,8 @@ class HomeViewModel: ViewModel() {
 data class HomeUiState(
     val movies: List<Movie> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val hasMorePages: Boolean = true,
+    val currentPage: Int = 1,
+    val isLoadingMore: Boolean = false,
 )
