@@ -22,7 +22,7 @@ object Home
 fun AppNavigation(){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Login){
+    NavHost(navController = navController, startDestination = Home){
         composable<Login> {
             LoginScreen(
                 navigateToRegister = { navController.navigate(Register) },
