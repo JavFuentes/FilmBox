@@ -66,6 +66,35 @@ class HomeViewModel(
         _uiState.update { it.copy(currentPage = 1, isLoadingMore = false) }
         loadMovies()
     }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isRefreshing = true) }
+
+            repository.refreshMovies().fold(
+                onSuccess = { dataSource ->
+                    _uiState.update {
+                        it.copy(
+                            movies = dataSource.movies,
+                            isRefreshing = false,
+                            errorMessage = null,
+                            hasMorePages = dataSource.currentPage < dataSource.totalPages && !dataSource.isFromCache,
+                            currentPage = 1,
+                            isFromCache = dataSource.isFromCache
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            isRefreshing = false,
+                            errorMessage = exception.message ?: "Error al refrescar"
+                        )
+                    }
+                }
+            )
+        }
+    }
 }
 
 data class HomeUiState(
@@ -76,4 +105,5 @@ data class HomeUiState(
     val currentPage: Int = 1,
     val isLoadingMore: Boolean = false,
     val isFromCache: Boolean = false,
+    val isRefreshing: Boolean = false
 )

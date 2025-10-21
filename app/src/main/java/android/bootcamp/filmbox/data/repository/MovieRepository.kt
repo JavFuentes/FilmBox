@@ -61,6 +61,10 @@ class MovieRepository(
             }
         }
     }
+
+    suspend fun refreshMovies(): Result<MovieDataSource> {
+        return getPopularMovies(page = 1)
+    }
 }
 
 data class MovieDataSource(
