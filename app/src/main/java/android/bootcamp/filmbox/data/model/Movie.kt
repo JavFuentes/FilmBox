@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 data class Movie(
     @PrimaryKey
     val id: Int,
-    val title:String,
+    val title: String,
     val overview: String,
     @ColumnInfo(name = "poster_path")
     @SerializedName("poster_path")
@@ -22,5 +22,5 @@ data class Movie(
     val voteAverage: Double,
     @ColumnInfo(name = "release_date")
     @SerializedName("release_date")
-    val releaseDate: String?
-        )
+    val releaseDate: String?,
+)

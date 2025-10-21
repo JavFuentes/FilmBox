@@ -1,7 +1,10 @@
 package android.bootcamp.filmbox.view.home
 
 import android.bootcamp.filmbox.R
+import android.bootcamp.filmbox.data.local.MovieDatabase
 import android.bootcamp.filmbox.data.model.Movie
+import android.bootcamp.filmbox.data.remote.RetrofitClient
+import android.bootcamp.filmbox.data.repository.MovieRepository
 import android.bootcamp.filmbox.ui.theme.Amber400
 import android.bootcamp.filmbox.ui.theme.AppShape
 import android.bootcamp.filmbox.ui.theme.Indigo950
@@ -34,9 +37,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,14 +50,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.util.TableInfo
 import coil.compose.AsyncImage
 import java.util.Locale
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = viewModel(),
+    homeViewModel: HomeViewModel = run {
+        val context = LocalContext.current
+
+        val database = remember { MovieDatabase.getDatabase(context) }
+
+        val movieRepository = remember {
+            MovieRepository(
+                apiService = RetrofitClient.apiService,
+                movieDao = database.movieDao()
+            )
+        }
+
+        viewModel { HomeViewModel(movieRepository) }
+    },
 ) {
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -60,10 +78,19 @@ fun HomeScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = stringResource(R.string.home_title),
-                        style = MaterialTheme.typography.headlineMedium
-                    )
+                    Column {
+                        Text(
+                            text = stringResource(R.string.home_title),
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                        if (uiState.isFromCache) {
+                            Text(
+                                text = stringResource(R.string.home_offline_mode),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Amber400
+                            )
+                        }
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Indigo950,
@@ -156,7 +183,6 @@ fun HomeScreen(
         }
     }
 }
-
 
 @Preview
 @Composable

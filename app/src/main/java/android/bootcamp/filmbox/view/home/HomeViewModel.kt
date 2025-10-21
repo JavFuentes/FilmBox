@@ -1,8 +1,7 @@
 package android.bootcamp.filmbox.view.home
 
-import android.bootcamp.filmbox.BuildConfig
 import android.bootcamp.filmbox.data.model.Movie
-import android.bootcamp.filmbox.data.remote.RetrofitClient
+import android.bootcamp.filmbox.data.repository.MovieRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +9,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val repository: MovieRepository,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
 
@@ -21,38 +22,41 @@ class HomeViewModel : ViewModel() {
     private fun loadMovies(page: Int = 1) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = page == 1) }
-            try {
-                val response = RetrofitClient.apiService.getPopularMovies(
-                    authorization = "Bearer ${BuildConfig.TMDB_ACCESS_TOKEN}",
-                    page = page
-                )
 
-                _uiState.update {
-                    it.copy(
-                        // Si es la página 1, reemplazar; si no, agregar a la lista existente
-                        movies = if (page == 1) response.results
-                        else it.movies + response.results,
-                        isLoading = false,
-                        errorMessage = null,
-                        hasMorePages = page < response.totalPages,
-                        currentPage = page,
-                        isLoadingMore = false
-                    )
+            repository.getPopularMovies(page).fold(
+                onSuccess = { dataSource ->
+                    _uiState.update {
+                        it.copy(
+                            // Si es la página 1, reemplazar; si no, agregar a la lista existente
+                            movies = if (page == 1) dataSource.movies
+                            else it.movies + dataSource.movies,
+                            isLoading = false,
+                            errorMessage = null,
+                            hasMorePages = page < dataSource.totalPages && !dataSource.isFromCache,
+                            currentPage = page,
+                            isLoadingMore = false,
+                            isFromCache = dataSource.isFromCache
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = exception.message ?: "Error desconocido",
+                            isLoadingMore = false
+                        )
+                    }
                 }
+            )
 
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = e.message ?: "Error desconocido"
-                    )
-                }
-            }
         }
     }
 
     fun loadNextPage() {
-        if (!_uiState.value.isLoadingMore && _uiState.value.hasMorePages) {
+        if (!_uiState.value.isLoadingMore &&
+            _uiState.value.hasMorePages &&
+            !_uiState.value.isFromCache) {
             _uiState.update { it.copy(isLoadingMore = true) }
             loadMovies(_uiState.value.currentPage + 1)
         }
@@ -71,4 +75,5 @@ data class HomeUiState(
     val hasMorePages: Boolean = true,
     val currentPage: Int = 1,
     val isLoadingMore: Boolean = false,
+    val isFromCache: Boolean = false,
 )

@@ -29,5 +29,6 @@
     <string name="home_error_loading">Error al cargar películas</string>
     <string name="home_loading">Cargando…</string>
     <string name="home_retry">Reintentar</string>
+    <string name="home_offline_mode">Modo sin conexión</string>
 
 </resources>
