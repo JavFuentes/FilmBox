@@ -56,10 +56,9 @@ class MovieRepository(
                     )
                 )
             } else {
+                // No hay cache, retornar error
                 Result.failure(e)
             }
-            // No hay cache, retornar error
-            Result.failure(e)
         }
     }
 }
