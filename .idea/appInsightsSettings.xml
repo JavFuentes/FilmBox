@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="android.bootcamp.filmbox" />
+                  <option name="mobileSdkAppId" value="1:28026589797:android:1328589a9de81275966c8c" />
+                  <option name="projectId" value="filmbox-2b0fc" />
+                  <option name="projectNumber" value="28026589797" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
