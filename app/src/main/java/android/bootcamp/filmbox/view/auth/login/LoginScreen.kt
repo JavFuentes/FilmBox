@@ -6,7 +6,6 @@ import android.bootcamp.filmbox.ui.theme.Amber400
 import android.bootcamp.filmbox.ui.theme.AppShape
 import android.bootcamp.filmbox.ui.theme.Indigo950
 import android.bootcamp.filmbox.ui.theme.Slate200
-import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -132,9 +132,22 @@ fun LoginScreen(
 
             Spacer(Modifier.height(16.dp))
 
+            // Mostrar mensaje de error si existe
+            uiState.errorMessage?.let { error ->
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                )
+            }
+
             Button(
-                onClick = { navigateToHome() },
-                enabled = uiState.isLoginEnabled,
+                onClick = { loginViewModel.login { navigateToHome() } },
+                enabled = uiState.isLoginEnabled && !uiState.isLoading,
                 shape = AppShape.large,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -143,10 +156,17 @@ fun LoginScreen(
                     disabledContentColor = Color.White
                 )
             ) {
-                Text(
-                    stringResource(R.string.login_button),
-                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
-                )
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White
+                    )
+                } else {
+                    Text(
+                        stringResource(R.string.login_button),
+                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
+                    )
+                }
             }
 
             TextButton(onClick = { }) {

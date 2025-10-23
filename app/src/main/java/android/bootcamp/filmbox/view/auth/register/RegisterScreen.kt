@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -91,7 +92,22 @@ fun RegisterScreen(
                 onPasswordChanged = { registerViewModel.onPasswordChanged(it) }
             )
 
-            ButtonsRegister(isRegisterEnabled = uiState.isRegisterEnabled)
+            // Mostrar el mensaje de error si existe
+            uiState.errorMessage?.let { error ->
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+            }
+
+            ButtonsRegister(
+                isRegisterEnabled = uiState.isRegisterEnabled,
+                isLoading = uiState.isLoading,
+                onRegisterClick = { registerViewModel.register { navigateBack() } }
+            )
 
             Spacer(Modifier.weight(1f))
 
@@ -110,7 +126,11 @@ fun RegisterScreen(
 }
 
 @Composable
-fun ButtonsRegister(isRegisterEnabled: Boolean) {
+fun ButtonsRegister(
+    isRegisterEnabled: Boolean,
+    isLoading: Boolean,
+    onRegisterClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -118,8 +138,8 @@ fun ButtonsRegister(isRegisterEnabled: Boolean) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = {},
-            enabled = isRegisterEnabled,
+            onClick = onRegisterClick,
+            enabled = isRegisterEnabled && !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp),
@@ -130,7 +150,14 @@ fun ButtonsRegister(isRegisterEnabled: Boolean) {
                 disabledContentColor = MaterialTheme.colorScheme.onSecondary
             )
         ) {
-            Text(stringResource(R.string.register_button))
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
+            } else {
+                Text(stringResource(R.string.register_button))
+            }
         }
     }
 }
