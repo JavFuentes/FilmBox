@@ -6,7 +6,6 @@ import android.bootcamp.filmbox.ui.theme.Amber400
 import android.bootcamp.filmbox.ui.theme.AppShape
 import android.bootcamp.filmbox.ui.theme.Indigo950
 import android.bootcamp.filmbox.ui.theme.Slate200
-import android.bootcamp.filmbox.view.core.navigation.Register
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,6 +31,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +57,10 @@ fun RegisterScreen(
     navigateBack: () -> Unit
 ) {
     val uiState by registerViewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        registerViewModel.clearState()
+    }
 
     Scaffold { padding ->
         Column(

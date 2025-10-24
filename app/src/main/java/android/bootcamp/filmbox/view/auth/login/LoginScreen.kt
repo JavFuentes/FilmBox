@@ -8,6 +8,7 @@ import android.bootcamp.filmbox.ui.theme.Indigo950
 import android.bootcamp.filmbox.ui.theme.Slate200
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,9 +18,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -28,12 +31,19 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,6 +58,12 @@ fun LoginScreen(
     navigateToHome: () -> Unit
 ) {
     val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
+
+    var passwordHidden by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        loginViewModel.clearState()
+    }
 
     Scaffold { padding ->
         Column(
@@ -127,7 +143,30 @@ fun LoginScreen(
                 ),
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     color = Indigo950
-                )
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
+                trailingIcon = {
+                    val visibilityIcon = if (passwordHidden) {
+                        R.drawable.visibility
+                    } else {
+                        R.drawable.visibility_off
+                    }
+
+                    val description = if (passwordHidden) {
+                        stringResource(R.string.password_show)
+                    } else {
+                        stringResource(R.string.password_hide)
+                    }
+
+                    Icon(
+                        painter = painterResource(id = visibilityIcon),
+                        contentDescription = description,
+                        modifier = Modifier.clickable {
+                            passwordHidden = !passwordHidden
+                        }
+                    )
+                }
             )
 
             Spacer(Modifier.height(16.dp))

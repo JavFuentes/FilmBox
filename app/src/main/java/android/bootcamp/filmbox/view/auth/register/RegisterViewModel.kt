@@ -1,6 +1,7 @@
 package android.bootcamp.filmbox.view.auth.register
 
 import android.bootcamp.filmbox.data.repository.AuthRepository
+import android.bootcamp.filmbox.view.auth.login.LoginUiState
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -52,6 +53,12 @@ class RegisterViewModel(
 
         _uiState.update {
             it.copy(isRegisterEnabled = enabledRegister)
+        }
+    }
+
+    fun clearState(){
+        _uiState.update {
+            RegisterUiState()
         }
     }
 

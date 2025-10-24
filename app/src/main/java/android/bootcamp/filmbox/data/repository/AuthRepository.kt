@@ -2,6 +2,7 @@ package android.bootcamp.filmbox.data.repository
 
 import android.bootcamp.filmbox.data.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
@@ -88,5 +89,23 @@ class AuthRepository {
             Result.failure(e)
         }
     }
+
+    /**
+     * Obtiene el usuario actualmente autenticado
+     * @return Usuario actual de Firebase Auth o null
+     */
+    fun getCurrentFirebaseUser(): FirebaseUser? {
+        return auth.currentUser
+    }
+
+    /**
+     * Cierra la sesión del usuario actual
+     */
+    fun logout() {
+        return auth.signOut()
+    }
+
+
+
 
 }

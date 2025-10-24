@@ -39,6 +39,12 @@ class LoginViewModel(
         }
     }
 
+    fun clearState(){
+        _uiState.update {
+            LoginUiState()
+        }
+    }
+
     fun login(onSuccess: () -> Unit) {
         // Lanza corrutina en el scope del ViewModel para operación asíncrona
         viewModelScope.launch {
@@ -81,6 +87,7 @@ class LoginViewModel(
         return when {
             exception.message?.contains("no user record") == true ||
                     exception.message?.contains("INVALID_LOGIN_CREDENTIALS") == true ||
+                    exception.message?.contains("malformed") == true ||
                     exception.message?.contains("invalid-credential") == true ->
                 "Usuario o contraseña incorrectos"
             exception.message?.contains("network") == true ->
