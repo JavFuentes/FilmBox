@@ -4,8 +4,11 @@ import android.bootcamp.filmbox.BuildConfig
 import android.bootcamp.filmbox.data.local.MovieDao
 import android.bootcamp.filmbox.data.model.Movie
 import android.bootcamp.filmbox.data.remote.ApiService
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MovieRepository(
+@Singleton
+class MovieRepository @Inject constructor(
     private val apiService: ApiService,
     private val movieDao: MovieDao,
 ) {

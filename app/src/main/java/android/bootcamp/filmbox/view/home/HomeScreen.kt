@@ -3,7 +3,6 @@ package android.bootcamp.filmbox.view.home
 import android.bootcamp.filmbox.R
 import android.bootcamp.filmbox.data.local.MovieDatabase
 import android.bootcamp.filmbox.data.model.Movie
-import android.bootcamp.filmbox.data.remote.RetrofitClient
 import android.bootcamp.filmbox.data.repository.MovieRepository
 import android.bootcamp.filmbox.ui.theme.Amber400
 import android.bootcamp.filmbox.ui.theme.AppShape
@@ -49,6 +48,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.util.TableInfo
@@ -58,20 +58,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = run {
-        val context = LocalContext.current
-
-        val database = remember { MovieDatabase.getDatabase(context) }
-
-        val movieRepository = remember {
-            MovieRepository(
-                apiService = RetrofitClient.apiService,
-                movieDao = database.movieDao()
-            )
-        }
-
-        viewModel { HomeViewModel(movieRepository) }
-    },
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
